@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">My Journal App</string>
+    <string name="title">Title</string>
+    <string name="delete">Delete</string>
+    <string name="journal_entry">What are you thinking?</string>
+    <string name="save_entry">Save Entry</string>
+    <string name="update_button">Update Entry</string>
+    <string name="yes">YES</string>
+    <string name="dialog_message_save">Save entry with empty body?</string>
+    <string name="dialog_message_exit">Exit without saving?</string>
+    <string name="dialog_message_delete">Are you sure you want to delete this entry?</string>
+    <string name="dialog_title_save">Empty Journal Entry</string>
+    <string name="dialog_title_exit">Unsaved Entry</string>
+    <string name="dialog_title_delete">Delete Entry</string>
 </resources>
