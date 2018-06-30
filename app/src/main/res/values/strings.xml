@@ -12,4 +12,13 @@
     <string name="dialog_title_save">Empty Journal Entry</string>
     <string name="dialog_title_exit">Unsaved Entry</string>
     <string name="dialog_title_delete">Delete Entry</string>
+    <string name="welcome">Welcome to your diary</string>
+    <string name="title_activity_nav_drawer">NavDrawerActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="register_login">Register/Sign In</string>
+    <string name="logout">Logout</string>
 </resources>
