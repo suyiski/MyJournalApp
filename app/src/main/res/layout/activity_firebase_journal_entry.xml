@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.JournalEntryActivity">
+    tools:context=".activity.FirebaseJournalEntryActivity">
 
     <EditText
-        android:id="@+id/editText_title"
+        android:id="@+id/editText_title_firebase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText_Body"
+        android:id="@+id/editText_body_firebase"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_marginLeft="8dp"
@@ -32,10 +32,10 @@
         android:inputType="textMultiLine"
         android:hint="@string/journal_entry"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_title" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_title_firebase" />
 
     <Button
-        android:id="@+id/btn_save_entry"
+        android:id="@+id/btn_save_entry_firebase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -44,9 +44,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/save_entry"
-        android:textColor="@android:color/white"
-        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_Body" />
+        app:layout_constraintTop_toBottomOf="@+id/editText_body_firebase" />
 </android.support.constraint.ConstraintLayout>

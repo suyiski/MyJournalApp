@@ -1,4 +1,4 @@
-package com.suizexpressions.myjournalapp;
+package com.suizexpressions.myjournalapp.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.suizexpressions.myjournalapp.R;
 import com.suizexpressions.myjournalapp.data.JournalEntry;
 
 import java.text.SimpleDateFormat;
