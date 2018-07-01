@@ -1,4 +1,4 @@
-package com.suizexpressions.myjournalapp;
+package com.suizexpressions.myjournalapp.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,18 +7,21 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
+import com.suizexpressions.myjournalapp.R;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener,
         GoogleApiClient.OnConnectionFailedListener{
@@ -26,9 +29,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static String TAG = LoginActivity.class.getSimpleName();
 
     private SignInButton mGoogleSignInButton;
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInClient mGoogleSignInClient;
     private static final int REQUEST_CODE = 1000;
-    static GoogleSignInAccount mGoogleSignInAccount;
+    private Button mRegisterSignInButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +41,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mGoogleSignInButton = findViewById(R.id.btn_google_sign_in);
         mGoogleSignInButton.setOnClickListener(this);
 
+        mRegisterSignInButton = findViewById(R.id.btn_register_login);
+        
+
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestProfile()
                 .requestEmail()
                 .build();
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
-                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        if(account!=null) {
+            updateUI(account);
+        }
 
 
     }
+
 
     @Override
     public void onClick(View view) {
@@ -59,6 +68,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } else {
                 Toast.makeText(LoginActivity.this, "Please check your internet connection", Toast.LENGTH_LONG).show();
             }
+        } else if (view.getId()==R.id.btn_register_login) {
+            Intent intent = new Intent(LoginActivity.this, FirebaseLoginActivity.class);
+            startActivity(intent);
         }
 
     }
@@ -70,32 +82,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void signIn() {
-            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, REQUEST_CODE);
     }
 
-    public void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
-            @Override
-            public void onResult(@NonNull Status status) {
-            }
-        });
-
-    }
-
-    public void handleResult(GoogleSignInResult result) {
-
-        if (result.isSuccess()) {
-            Toast.makeText(LoginActivity.this, "Sign in Successful", Toast.LENGTH_LONG).show();
-            GoogleSignInAccount googleSignInAccount = result.getSignInAccount();
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("username", googleSignInAccount.getDisplayName());
-            intent.putExtra("userEmail", googleSignInAccount.getEmail());
-            startActivity(intent);
-        } else {
-            Toast.makeText(LoginActivity.this, "Error Logging in", Toast.LENGTH_LONG).show();
-        }
-    }
 
 
     @Override
@@ -103,9 +93,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode==REQUEST_CODE) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleResult(result);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleResult(task);
         }
+    }
+
+    public void handleResult(Task<GoogleSignInAccount> completedTask) {
+
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(LoginActivity.this, "Error Signing in", Toast.LENGTH_LONG).show();
+
+        }
+
     }
 
     private boolean isNetworkAvailable() {
@@ -113,5 +118,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    private void updateUI(GoogleSignInAccount account) {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        intent.putExtra("username", account.getDisplayName());
+        intent.putExtra("userEmail", account.getEmail());
+        startActivity(intent);
     }
 }

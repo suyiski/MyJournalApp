@@ -19,6 +19,9 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="register_login">Register/Sign In</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
     <string name="logout">Logout</string>
+    <string name="register_info">Or sign in with google</string>
+    <string name="register_login">Register/Login</string>
 </resources>

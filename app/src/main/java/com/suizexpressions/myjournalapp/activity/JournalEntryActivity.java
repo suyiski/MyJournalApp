@@ -1,4 +1,4 @@
-package com.suizexpressions.myjournalapp;
+package com.suizexpressions.myjournalapp.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -20,6 +20,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.suizexpressions.myjournalapp.JournalEntryViewModel;
+import com.suizexpressions.myjournalapp.JournalEntryViewModelFactory;
+import com.suizexpressions.myjournalapp.JournalExecutors;
+import com.suizexpressions.myjournalapp.R;
 import com.suizexpressions.myjournalapp.data.JournalDatabase;
 import com.suizexpressions.myjournalapp.data.JournalEntry;
 
