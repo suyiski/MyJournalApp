@@ -15,9 +15,16 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.suizexpressions.myjournalapp.data.JournalDatabase;
 import com.suizexpressions.myjournalapp.data.JournalEntry;
 
@@ -25,12 +32,15 @@ import java.util.List;
 
 import static android.support.v7.widget.DividerItemDecoration.VERTICAL;
 
-public class MainActivity extends AppCompatActivity implements JournalAdapter.ItemClickListener,
-        NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements JournalAdapter.ItemClickListener {
+
+    private static String TAG = MainActivity.class.getSimpleName();
 
     private JournalAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private JournalDatabase mDb;
+    private TextView mUsername;
+    private TextView mUserEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +49,15 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mUsername = findViewById(R.id.tv_user_name);
+        mUserEmail = findViewById(R.id.tv_user_email);
 
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("username");
+        String email = intent.getStringExtra("userEmail");
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        mUsername.setText(name);
+        mUserEmail.setText(email);
 
         mRecyclerView = findViewById(R.id.recycler_view_journal_entries);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -90,12 +100,19 @@ public class MainActivity extends AppCompatActivity implements JournalAdapter.It
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_logout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id==R.id.logout) {
             Intent intent = new Intent(MainActivity.this, LogOutActivity.class);
             startActivity(intent);
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 }
